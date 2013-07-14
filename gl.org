@@ -1,0 +1,80 @@
+* To do
+ - [X] Make from within emacs (just use M-c)
+ - [X] Run gdb from within emacs
+       M-x gdb
+       set-variable gdb-many-windows t, or M-x dbg-many-windows
+ - [X] Use my own WndProc again
+ - [X] Do deps correctly (like with that sed command)
+ - [X] -MMD instead of -MD for dependency generation?
+ - [X] Retrieve code for ctrl-enter in search
+ - [X] Review existing OpenGL code
+ - [X] Look at disassembly
+ - [ ] Need to call glDisableVertexAttribArray?
+ - [ ] Improve Makefile
+   - [ ] Combine sed rules
+   - [ ] Put objs and deps in separate directory
+ - [ ] debug vs release
+ - [ ] Unit tests (for Math in particular)
+ - [ ] Source control
+* Renderer logic
+  constructor
+    InitGl
+      InitGlVars
+      CompileShaders
+        also sets locations of uniform (not per-vertex or per-pixel) variables
+      CreateMeshes
+        mMeshes now contains spheres
+      CreateLight
+        sets mLightPos
+      CreateVertexBuffer
+        sets up the vertex buffer
+      CreateIndexBuffer
+        sets up the index buffer (with triangles)
+      InitializeVertexArrayObjects
+        sets up the vertex array object
+    InitPipeline
+      sets up the pipline's matrix
+
+  Poll
+    UpdateScene
+      change mScale
+    UpdateObjects
+      move meshes
+    for each mesh
+      SetUniforms
+        set uniform variables used by shader
+      DrawElements
+        selects the appropriate VAO
+        draws it
+
+* OpenGL logic
+
+Vertex Buffer Object (VBO): a buffer of raw data (vertices, colors,
+etc.) with no typing.
+
+Vertex Array Object (VAO): describe what type of data is in a VBO, and
+which shader variables to send the data to.
+
+To put data in a VBO:
+ - glGenBuffers gives us a buffer_id
+ - glBindBuffer specifies its target
+ - glBufferData creates its data
+
+Conceptually, OpenGL can access buffers only through specific
+pointer member variables, such as GL_ARRAY_BUFFER.
+
+The only way to set those pointers is with glBindBuffer.
+
+   gl::BindBuffer( GL_ARRAY_BUFFER, mVBO );
+
+Now you can go ahead and use that pointer for OpenGL functions that
+require it.
+
+   glBufferData( GL_ARRAY_BUFFER,
+                 mMeshes[0]->VertexDataSize(),
+                 mMeshes[0]->VertexData(),
+                 GL_STATIC_DRAW );
+
+Good practice to null out the pointer when you're done.
+
+   gl::BindBuffer( GL_ARRAY_BUFFER, gl::null_buffer_id );
