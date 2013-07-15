@@ -8,13 +8,13 @@ CXXOBJS = Math.o Mesh.o Pipeline.o Renderer.o Utl.o gcctest.o
 %.o : %.c
 	$(CC) -c -MMD -o $@ $<
 	@sed -e "s/.*: /$*.o: /" < $*.d > $*.P
-	@sed -e "s/.*: //" -e "s/\\$$//" < $*.d | fmt -1 | sed -e "s/^ *//" -e "s/$$/:/" >> $*.P
+	@sed -e "s/.*: //" -e "s/\\\\$$//" < $*.d | fmt -1 | sed -e "s/^ *//" -e "s/$$/:/" >> $*.P
 	@rm -f $*.d
 
 %.o : %.cpp
 	$(CXX) $(CXXFLAGS) -c -MMD -o $@ $<
-	@sed -e "s/.*:/$*.o:/" < $*.d > $*.P
-	@sed -e "s/.*: //" -e "s/\\$$//" < $*.d | fmt -1 | sed -e "s/^ *//" -e "s/$$/:/" >> $*.P
+	@sed -e "s/.*: /$*.o: /" < $*.d > $*.P
+	@sed -e "s/.*: //" -e "s/\\\\$$//" < $*.d | fmt -1 | sed -e "s/^ *//" -e "s/$$/:/" >> $*.P
 	@rm -f $*.d
 
 # Disassembly
