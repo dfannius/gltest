@@ -14,6 +14,8 @@ public:
       val( _val )
    {}
 
+   bool IsNull() const { return val == 0; }
+
    T val;
 };
 
@@ -54,6 +56,12 @@ namespace gl
 
    inline shader_id  CreateShader( GLenum shaderType )
    { return shader_id( glCreateShader( shaderType ) ); }
+
+   inline void       DeleteShader( shader_id shader )
+   { glDeleteShader( shader.val ); }
+
+   inline void       DetachShader( program_id program, shader_id shader )
+   { glDetachShader( program.val, shader.val ); }
 
    inline void       GenBuffers( GLsizei n, buffer_id* buffers )
    { glGenBuffers( n, reinterpret_cast<GLuint*>( buffers ) ); }

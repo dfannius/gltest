@@ -10,6 +10,7 @@
 
 class Mesh;
 class Pipeline;
+class ShaderProgram;
 
 class Renderer
 {
@@ -34,15 +35,9 @@ private:
    void SetUniforms( Mesh* mesh );
    void DrawElements( Mesh* mesh );
 
-   void LoadShader( gl::program_id shader_program, const char* filename, GLenum shader_type );
    void CompileShaders();
-   void LinkProgram( gl::program_id shader_program );
-   void ValidateProgram( gl::program_id shader_program );
-   void PerformProgramAction( gl::program_id shader_program,
-                              std::function< void( gl::program_id ) > gl_func,
-                              GLenum status_type,
-                              const char* desc );
-   void AddShader( gl::program_id shader_program,
+   void LoadShader( ShaderProgram& shader_program, const char* filename, GLenum shader_type );
+   void AddShader( ShaderProgram& shader_program,
                    const char* shader_text,
                    const char* shader_name,
                    GLenum shader_type );

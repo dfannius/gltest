@@ -8,6 +8,7 @@
 #include "Mesh.h"
 #include "Pipeline.h"
 #include "Renderer.h"
+#include "ShaderProgram.h"
 #include "Utl.h"
 
 // ---------------------------------------------------------------------
@@ -247,7 +248,24 @@ void Renderer::Poll( long ms )
    // DBOUT( frame_delta << "\n" );
 }
 
-void Renderer::LoadShader( gl::program_id shader_program,
+void Renderer::CompileShaders()
+{
+   ShaderProgram program {};
+   program.Create();
+
+   LoadShader( program, "lighting.vert", GL_VERTEX_SHADER );
+   LoadShader( program, "lighting.frag", GL_FRAGMENT_SHADER );
+
+   program.Activate();
+
+   gl::program_id id = program.ProgramID();
+   mModelToCameraLocation       = gl::GetUniformLocation( id, "model_to_camera_mtx" );
+   mNormalModelToCameraLocation = gl::GetUniformLocation( id, "normal_to_camera_mtx" );
+   mCameraToClipLocation        = gl::GetUniformLocation( id, "camera_to_clip_mtx" );
+   mLightPosLocation            = gl::GetUniformLocation( id, "light_pos" );
+}
+
+void Renderer::LoadShader( ShaderProgram& shader_program,
                            const char* filename,
                            GLenum shader_type )
 {
@@ -256,61 +274,7 @@ void Renderer::LoadShader( gl::program_id shader_program,
    AddShader( shader_program, src.c_str(), filename, shader_type );
 }
 
-void Renderer::CompileShaders()
-{
-   gl::program_id shader_program = gl::CreateProgram();
-
-   if (shader_program.val == 0) {
-      DBOUT( "Error creating shader program\n" );
-      exit( 1 );
-   }
-
-   LoadShader( shader_program, "lighting.vert", GL_VERTEX_SHADER );
-   LoadShader( shader_program, "lighting.frag", GL_FRAGMENT_SHADER );
-   LinkProgram( shader_program );
-   ValidateProgram( shader_program );
-   gl::UseProgram( shader_program );
-
-   mModelToCameraLocation       = gl::GetUniformLocation( shader_program, "model_to_camera_mtx" );
-   mNormalModelToCameraLocation = gl::GetUniformLocation( shader_program, "normal_to_camera_mtx" );
-   mCameraToClipLocation        = gl::GetUniformLocation( shader_program, "camera_to_clip_mtx" );
-   mLightPosLocation            = gl::GetUniformLocation( shader_program, "light_pos" );
-}
-
-void Renderer::LinkProgram( gl::program_id shader_program )
-{
-   PerformProgramAction( shader_program,
-                         gl::LinkProgram,
-                         GL_LINK_STATUS,
-                         "linking" );
-}
-
-void Renderer::ValidateProgram( gl::program_id shader_program )
-{
-   PerformProgramAction( shader_program,
-                         gl::ValidateProgram,
-                         GL_VALIDATE_STATUS,
-                         "validating" );
-}
-
-void Renderer::PerformProgramAction( gl::program_id shader_program,
-                                     std::function< void( gl::program_id ) > gl_func,
-                                     GLenum status_type,
-                                     const char* desc )
-{
-   GLint success = 0;
-   GLchar error_log[1024];
-
-   gl_func( shader_program );
-   gl::GetProgramiv( shader_program, status_type, &success );
-   if (!success) {
-      gl::GetProgramInfoLog( shader_program, sizeof error_log, NULL, error_log );
-      DBOUT( "Error " << desc << " shader program: '" << error_log << "'\n" );
-      exit( 1 );
-   }
-}
-
-void Renderer::AddShader( gl::program_id shader_program,   // ID of the program
+void Renderer::AddShader( ShaderProgram& shader_program,   // ID of the program
                           const char* shader_text, // source text
                           const char* shader_name, // file name
                           GLenum shader_type )     // vertex or fragment
@@ -343,6 +307,5 @@ void Renderer::AddShader( gl::program_id shader_program,   // ID of the program
       exit( 1 );
    }
 
-   // Attach shader to program
-   gl::AttachShader( shader_program, shader_obj );
+   shader_program.AttachShader( shader_obj );
 }
