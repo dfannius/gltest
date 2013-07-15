@@ -110,27 +110,28 @@ void Renderer::InitializeVertexArrayObjects()
 
    // TODO: Should most of this actually happen in Poll?
 
-   // All the following statements now apply to mVAO
-   {
-      WithVertexArray( mVAO );
+   gl::BindVertexArray( mVAO );
 
-      // Make mVBO the active GL_ARRAY_BUFFER, because
-      // glVertexAttribPointer implicitly operates on GL_ARRAY_BUFFER
-      gl::BindBuffer( GL_ARRAY_BUFFER, mVBO );
+   /*
+   // Make mVBO the active GL_ARRAY_BUFFER, because
+   // glVertexAttribPointer implicitly operates on GL_ARRAY_BUFFER
+   gl::BindBuffer( GL_ARRAY_BUFFER, mVBO );
 
-      // Enable the per-vertex inputs in the shader
-      glEnableVertexAttribArray( 0 ); // position
-      glEnableVertexAttribArray( 1 ); // normal
-      glEnableVertexAttribArray( 2 ); // color
+   // Enable the per-vertex inputs in the shader
+   glEnableVertexAttribArray( 0 ); // position
+   glEnableVertexAttribArray( 1 ); // normal
+   glEnableVertexAttribArray( 2 ); // color
 
-      // Specify how to access them
-      mMeshes[0]->glVertexAttribPointer( 0, Mesh::DataType::kVertexPos );
-      mMeshes[0]->glVertexAttribPointer( 1, Mesh::DataType::kVertexNormal );
-      mMeshes[0]->glVertexAttribPointer( 2, Mesh::DataType::kVertexColor );
+   // Specify how to access them
+   mMeshes[0]->glVertexAttribPointer( 0, Mesh::DataType::kVertexPos );
+   mMeshes[0]->glVertexAttribPointer( 1, Mesh::DataType::kVertexNormal );
+   mMeshes[0]->glVertexAttribPointer( 2, Mesh::DataType::kVertexColor );
 
-      // Make mIBO the active GL_ELEMENT_ARRAY_BUFFER [TODO: why?]
-      gl::BindBuffer( GL_ELEMENT_ARRAY_BUFFER, mIBO );
-   }
+   // Make mIBO the active GL_ELEMENT_ARRAY_BUFFER [TODO: why?]
+   gl::BindBuffer( GL_ELEMENT_ARRAY_BUFFER, mIBO );
+   */
+
+   gl::BindVertexArray( 0 );
 }
 
 void Renderer::UpdateScene( long ms )
@@ -147,10 +148,10 @@ void Renderer::UpdateObjects( long ms )
 {
    float sinf_mScale = sinf( mScale );
    float cosf_mScale = sinf( mScale );
-// float sinf_tenth_mScale = sinf( mScale * 0.1f );
+   // float sinf_tenth_mScale = sinf( mScale * 0.1f );
 
-// float xs[] = { -1.5f, 1.5f };
-// float zs[] = { -20.f + sinf_mScale, -20.f - sinf_mScale };
+   // float xs[] = { -1.5f, 1.5f };
+   // float zs[] = { -20.f + sinf_mScale, -20.f - sinf_mScale };
 
    float xs[] = { sinf_mScale, -sinf_mScale };
    float ys[] = { 0.f, 0.f };
@@ -163,8 +164,8 @@ void Renderer::UpdateObjects( long ms )
       Vector3f translation( xs[i], ys[i], zs[i] );
       mesh->SetTranslation( translation );
 
-//    Vector3f rot( mScale * 200.f, mScale * 200.f, mScale * 200.f );
-//    mesh->SetRotation( rot );
+      //    Vector3f rot( mScale * 200.f, mScale * 200.f, mScale * 200.f );
+      //    mesh->SetRotation( rot );
    }
 }
 
@@ -195,11 +196,30 @@ void Renderer::SetUniforms( Mesh* mesh )
 
 void Renderer::DrawElements( Mesh* mesh )
 {
-   WithVertexArray( mVAO );
+   gl::BindVertexArray( mVAO );
+
+   // Make mVBO the active GL_ARRAY_BUFFER, because
+   // glVertexAttribPointer implicitly operates on GL_ARRAY_BUFFER
+   gl::BindBuffer( GL_ARRAY_BUFFER, mVBO );
+
+   // Enable the per-vertex inputs in the shader
+   glEnableVertexAttribArray( 0 ); // position
+   glEnableVertexAttribArray( 1 ); // normal
+   glEnableVertexAttribArray( 2 ); // color
+
+   // Specify how to access them
+   mesh->glVertexAttribPointer( 0, Mesh::DataType::kVertexPos );
+   mesh->glVertexAttribPointer( 1, Mesh::DataType::kVertexNormal );
+   mesh->glVertexAttribPointer( 2, Mesh::DataType::kVertexColor );
+
+   // Make mIBO the active GL_ELEMENT_ARRAY_BUFFER [TODO: why?]
+   gl::BindBuffer( GL_ELEMENT_ARRAY_BUFFER, mIBO );
+
    glDrawElements( GL_TRIANGLES,           // mode
                    mesh->IndexDataCount(), // index count
                    GL_UNSIGNED_INT,        // type
                    0 );                    // first index
+   gl::BindVertexArray( 0 );
 }
 
 void Renderer::Poll( long ms )
@@ -223,8 +243,8 @@ void Renderer::Poll( long ms )
    LARGE_INTEGER frame_stop_time;
    QueryPerformanceCounter( &frame_stop_time );
 
-// LONGLONG frame_delta( frame_stop_time.QuadPart - frame_start_time.QuadPart );
-// DBOUT( frame_delta << "\n" );
+   // LONGLONG frame_delta( frame_stop_time.QuadPart - frame_start_time.QuadPart );
+   // DBOUT( frame_delta << "\n" );
 }
 
 void Renderer::LoadShader( gl::program_id shader_program,
