@@ -208,7 +208,8 @@ BOOL InitInstance( HINSTANCE hInstance, int nCmdShow )
 //  PURPOSE:  Processes messages for the main window.
 //
 //  WM_COMMAND  - process the application menu
-//  WM_PAINT    - Paint the main window
+//  WM_KEYDOWN  - keyboard messages
+//  WM_PAINT    - paint the main window
 //  WM_DESTROY  - post a quit message and return
 //
 //
@@ -223,6 +224,7 @@ LRESULT CALLBACK WndProc( HWND hWnd,      // window handle
    switch (message)
    {
       case WM_COMMAND:
+      {
          wmId    = LOWORD(wParam); // menu ID or accel ID
          // wmEvent = HIWORD(wParam); // whether it's menu or accel
          // Parse the menu selections:
@@ -246,6 +248,22 @@ LRESULT CALLBACK WndProc( HWND hWnd,      // window handle
                return DefWindowProc( hWnd, message, wParam, lParam );
          }
          break;
+      }
+
+      case WM_KEYDOWN:
+      {
+         switch (wParam)
+         {
+            case VK_ESCAPE:
+            {
+               SendMessage( hWnd, WM_COMMAND, IDM_EXIT, 0 );
+               break;
+            }
+            default:
+               break;
+         }
+         break;
+      }
 
       case WM_PAINT:
       {
