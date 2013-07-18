@@ -283,6 +283,11 @@ struct Matrix4f
       memset( m, 0, 16 * sizeof( float ) );
       m[0][0] = m[1][1] = m[2][2] = m[3][3] = 1.f;
    }
+
+   void SetScale( const Vector3f& v );
+   void SetRotation( const Vector3f& v ); // v's angles are in radians
+   void SetTranslation( const Vector3f& v );
+
    const float* Data() const { return &m[0][0]; }
 
    float m[4][4];
