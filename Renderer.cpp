@@ -108,31 +108,6 @@ void Renderer::CreateIndexBuffer()
 void Renderer::InitializeVertexArrayObjects()
 {
    gl::GenVertexArrays( 1, &mVAO ); // mVAO is now a VAO name
-
-   // TODO: Should most of this actually happen in Poll?
-
-   gl::BindVertexArray( mVAO );
-
-   /*
-   // Make mVBO the active GL_ARRAY_BUFFER, because
-   // glVertexAttribPointer implicitly operates on GL_ARRAY_BUFFER
-   gl::BindBuffer( GL_ARRAY_BUFFER, mVBO );
-
-   // Enable the per-vertex inputs in the shader
-   glEnableVertexAttribArray( 0 ); // position
-   glEnableVertexAttribArray( 1 ); // normal
-   glEnableVertexAttribArray( 2 ); // color
-
-   // Specify how to access them
-   mMeshes[0]->glVertexAttribPointer( 0, Mesh::DataType::kVertexPos );
-   mMeshes[0]->glVertexAttribPointer( 1, Mesh::DataType::kVertexNormal );
-   mMeshes[0]->glVertexAttribPointer( 2, Mesh::DataType::kVertexColor );
-
-   // Make mIBO the active GL_ELEMENT_ARRAY_BUFFER [TODO: why?]
-   gl::BindBuffer( GL_ELEMENT_ARRAY_BUFFER, mIBO );
-   */
-
-   gl::BindVertexArray( 0 );
 }
 
 void Renderer::UpdateScene( long ms )
@@ -213,7 +188,7 @@ void Renderer::DrawElements( Mesh* mesh )
    mesh->glVertexAttribPointer( 1, Mesh::DataType::kVertexNormal );
    mesh->glVertexAttribPointer( 2, Mesh::DataType::kVertexColor );
 
-   // Make mIBO the active GL_ELEMENT_ARRAY_BUFFER [TODO: why?]
+   // Make mIBO the active GL_ELEMENT_ARRAY_BUFFER for use by glDrawElements
    gl::BindBuffer( GL_ELEMENT_ARRAY_BUFFER, mIBO );
 
    glDrawElements( GL_TRIANGLES,           // mode

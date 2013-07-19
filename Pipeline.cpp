@@ -28,9 +28,9 @@ void Pipeline::InitRotationXfm()
    const float y = degrees_to_radians( mRotation.y );
    const float z = degrees_to_radians( mRotation.z );
 
-   float cosfx = cosf(x); float sinfx = sinf(x);
-   float cosfy = cosf(y); float sinfy = sinf(y);
-   float cosfz = cosf(z); float sinfz = sinf(z);
+   float cosfx = cosf( x ); float sinfx = sinf( x );
+   float cosfy = cosf( y ); float sinfy = sinf( y );
+   float cosfz = cosf( z ); float sinfz = sinf( z );
 
    rx.SetIdentity();
    rx( 1, 1 ) = cosfx; rx( 1, 2 ) = -sinfx;

@@ -9,43 +9,61 @@
  - [X] Retrieve code for ctrl-enter in search
  - [X] Review existing OpenGL code
  - [X] Look at disassembly
+ - [X] Source control
+ - [X] glDetachShader, glDeleteShader
+ - [X] TransformState should include matrices
+ - [ ] Renderer use TransformState instead of Pipeline
+ - [ ] Add camera (new transform after Model, before Clip)
+ - [ ] Allow camera movement
+ - [ ] Multiple objects
  - [ ] Need to call glDisableVertexAttribArray?
+ - [ ] Move rendering logic to Poll (e.g., Renderer::InitializeVertexArrayObjects)
  - [ ] Improve Makefile
    - [ ] Combine sed rules
    - [ ] Put objs and deps in separate directory
- - [ ] debug vs release
+ - [ ] debug and release builds
  - [ ] Unit tests (for Math in particular)
- - [ ] Source control
 * Renderer logic
-  constructor
-    InitGl
-      InitGlVars
-      CompileShaders
-        also sets locations of uniform (not per-vertex or per-pixel) variables
-      CreateMeshes
-        mMeshes now contains spheres
-      CreateLight
-        sets mLightPos
-      CreateVertexBuffer
-        sets up the vertex buffer
-      CreateIndexBuffer
-        sets up the index buffer (with triangles)
-      InitializeVertexArrayObjects
-        sets up the vertex array object
-    InitPipeline
-      sets up the pipline's matrix
+*** Current logic
+    constructor
+      InitGl
+        InitGlVars
+        CompileShaders
+          also sets locations of uniform (not per-vertex or per-pixel) variables
+        CreateMeshes
+          mMeshes now contains spheres
+        CreateLight
+          sets mLightPos
+        CreateVertexBuffer
+          sets up the vertex buffer
+        CreateIndexBuffer
+          sets up the index buffer (with triangles)
+        InitializeVertexArrayObjects
+          sets up the vertex array object
+      InitPipeline
+        sets up the pipline's matrix
 
-  Poll
-    UpdateScene
-      change mScale
-    UpdateObjects
-      move meshes
-    for each mesh
-      SetUniforms
-        set uniform variables used by shader
-      DrawElements
-        selects the appropriate VAO
-        draws it
+    Poll
+      UpdateScene
+        change mScale
+      UpdateObjects
+        move meshes
+      for each mesh
+        SetUniforms
+          set uniform variables used by shader
+        DrawElements
+          selects the appropriate VAO
+          draws it
+*** New architecture
+
+    Every object has:
+     - mesh data
+     - model-to-world transform
+
+    At rendering time:
+     - for each object
+       - create model-to-view transform given camera
+       - SetUniforms / DrawElements
 
 * OpenGL logic
 
