@@ -3,7 +3,7 @@ CXX = g++
 CXXFLAGS = -Wall -g -std=c++11
 
 COBJS = gl3w.o
-CXXOBJS = Math.o Mesh.o Pipeline.o Renderer.o ShaderProgram.o Utl.o gcctest.o
+CXXOBJS = Camera.o Math.o Mesh.o Pipeline.o Renderer.o ShaderProgram.o TransformState.o Utl.o gcctest.o
 
 %.o : %.c
 	$(CC) -c -MMD -o $@ $<

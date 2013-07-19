@@ -1,6 +1,7 @@
 #include <sstream>
 
 #include "Pipeline.h"
+#include "TransformState.h"
 #include "Utl.h"
 
 void Pipeline::DebugVector( Vector3f const& v ) const
