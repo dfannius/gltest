@@ -58,6 +58,24 @@ Matrix3f::Matrix3f( const Matrix4f& rhs )
 }
 
 
+Matrix3f operator*( const Matrix3f& m1, const Matrix3f& m2 )
+{
+   Matrix3f m( MatrixType::kMultiplicationMatrix, m1, m2 );
+   return m;
+}
+
+Vector3f operator*( const Matrix3f& m, const Vector3f& v )
+{
+   Vector3f vout;
+   for (int i = 0; i < 3; ++i) {
+      vout[i] = (m.m[i][0] * v[0] +
+                 m.m[i][1] * v[1] +
+                 m.m[i][2] * v[2] );
+
+   }
+   return vout;
+}
+
 void MultiplyInto( Matrix4f& m, Matrix4f const& m1, Matrix4f const& m2 )
 {
    for (unsigned int i = 0; i < 4; ++i) {

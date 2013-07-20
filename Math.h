@@ -117,7 +117,7 @@ inline void NegateInto( Vector3f& res, const Vector3f& v )
 struct Vector4f
 {
    Vector4f() {}
-   Vector4f( const Vector3f& v ):
+   explicit Vector4f( const Vector3f& v ):
       x( v.x ), y( v.y ), z( v.z ), w( 1.f ) {}
    Vector4f( float _x, float _y, float _z, float _w ):
       x( _x ), y( _y ), z( _z ), w( _w ) {}
@@ -215,6 +215,9 @@ struct Matrix3f
    float m[3][3];
 };
 
+Matrix3f operator*( const Matrix3f& m1, const Matrix3f& m2 );
+Vector3f operator*( const Matrix3f& m, const Vector3f& v );
+
 //////////////////////////////
 
 struct Matrix4f
@@ -293,13 +296,6 @@ struct Matrix4f
    float m[4][4];
 };
 
-//////////////////////////////
-
-std::ostream& operator<< (std::ostream &out, const Matrix3f &m);
-std::ostream& operator<< (std::ostream &out, const Matrix4f &m);
-std::ostream& operator<< (std::ostream &out, const Vector3f &v);
-std::ostream& operator<< (std::ostream &out, const Vector4f &v);
-
 /*
 void MultiplyInto( Matrix4f& m, const Matrix4f& m1, const Matrix4f& m2 );
 void MultiplyInto( Vector4f& vout, const Matrix4f& m, const Vector4f& v );
@@ -307,6 +303,13 @@ void MultiplyInto( Vector4f& vout, const Matrix4f& m, const Vector4f& v );
 
 Matrix4f operator*( const Matrix4f& m1, const Matrix4f& m2 );
 Vector4f operator*( const Matrix4f& m, const Vector4f& v );
+
+//////////////////////////////
+
+std::ostream& operator<< (std::ostream &out, const Matrix3f &m);
+std::ostream& operator<< (std::ostream &out, const Matrix4f &m);
+std::ostream& operator<< (std::ostream &out, const Vector3f &v);
+std::ostream& operator<< (std::ostream &out, const Vector4f &v);
 
 float degrees_to_radians( float x );
 float radians_to_degrees( float x );
