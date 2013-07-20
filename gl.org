@@ -12,17 +12,23 @@
  - [X] Source control
  - [X] glDetachShader, glDeleteShader
  - [X] TransformState should include matrices
- - [ ] Renderer use TransformState instead of Pipeline
- - [ ] Add camera (new transform after Model, before Clip)
+ - [X] Cube, so that it's easier to test cameras
+ - [X] Improve Makefile
+   - [X] Put objs in separate directory
+   - [X] Put deps in separate directory
+   - [X] Combine sed rules for .cpp and .c files
+ - [X] Move rendering logic to Poll (e.g., Renderer::InitializeVertexArrayObjects)
+ - [X] Matrix4f utility to make perspective matrices
+ - [X] Invert orthonormal matrix
+ - [X] Make sure search doesn't descend into .git, deps, objs
+ - [X] Renderer use TransformState instead of Pipeline
+ - [X] Add camera (new transform after Model, before Clip)
  - [ ] Allow camera movement
  - [ ] Multiple objects
  - [ ] Need to call glDisableVertexAttribArray?
- - [ ] Move rendering logic to Poll (e.g., Renderer::InitializeVertexArrayObjects)
- - [ ] Improve Makefile
-   - [ ] Combine sed rules
-   - [ ] Put objs and deps in separate directory
  - [ ] debug and release builds
  - [ ] Unit tests (for Math in particular)
+
 * Renderer logic
 *** Current logic
     constructor
