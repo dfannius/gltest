@@ -8,8 +8,8 @@
 #include "GlUtl.h"
 #include "Math.h"
 
+class Camera;
 class Mesh;
-class Pipeline;
 class ShaderProgram;
 
 class Renderer
@@ -23,7 +23,7 @@ public:
 private:
    void InitGl();
    void InitGlVars();
-   void InitPipeline();
+   void InitCamera();
 
    void CreateMeshes();
    void CreateLight();
@@ -59,7 +59,7 @@ private:
 
    long mLastMs;
 
-   Pipeline* mPipeline;
+   Camera* mCamera;
 
    std::vector<Mesh*> mMeshes;
    Vector3f mLightPos;

@@ -3,7 +3,7 @@ CXX = g++
 CXXFLAGS = -Wall -g -std=c++11
 
 CSRCS = gl3w.c
-CXXSRCS = Camera.cpp Math.cpp MathTest.cpp Mesh.cpp Pipeline.cpp Renderer.cpp ShaderProgram.cpp TransformState.cpp Utl.cpp gcctest.cpp
+CXXSRCS = Camera.cpp Math.cpp MathTest.cpp Mesh.cpp Renderer.cpp ShaderProgram.cpp TransformState.cpp Utl.cpp gcctest.cpp
 
 DEPDIR = deps
 OBJDIR = objs

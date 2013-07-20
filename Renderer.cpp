@@ -3,12 +3,14 @@
 #include <iostream>
 #include <string>
 
+#include "Camera.h"
 #include "GlUtl.h"
 #include "Math.h"
+#include "MathTest.h"
 #include "Mesh.h"
-#include "Pipeline.h"
 #include "Renderer.h"
 #include "ShaderProgram.h"
+#include "TransformState.h"
 #include "Utl.h"
 
 // ---------------------------------------------------------------------
@@ -24,12 +26,12 @@ Renderer::Renderer():
    mLightPosLocation( -1 ),
    mScale( 0.f ),
    mLastMs( 0 ),
-   mPipeline( new Pipeline )
+   mCamera( new Camera )
 {
    mLightPos.SetZero();
 
    InitGl();
-   InitPipeline();
+   InitCamera();
 }
 
 Renderer::~Renderer()
@@ -59,9 +61,9 @@ void Renderer::InitGlVars()
    glProvokingVertex( GL_FIRST_VERTEX_CONVENTION );
 }
 
-void Renderer::InitPipeline()
+void Renderer::InitCamera()
 {
-   mPipeline->SetPerspective( -2.f, 2.f, -2.f, 2.f, 17.f, 53.f );
+   mCamera->SetPerspective( -2.f, 2.f, -2.f, 2.f, 17.f, 53.f );
 }
 
 void Renderer::CreateMeshes()
@@ -140,21 +142,25 @@ void Renderer::UpdateObjects( long ms )
       Vector3f translation( xs[i], ys[i], zs[i] );
       mesh->SetTranslation( translation );
 
-      //    Vector3f rot( mScale * 200.f, mScale * 200.f, mScale * 200.f );
-      //    mesh->SetRotation( rot );
+      Vector3f rot( mScale, mScale * 2.f, mScale * 3.f );
+      mesh->SetRotation( rot );
    }
 }
 
 void Renderer::SetUniforms( Mesh* mesh )
 {
-   mPipeline->SetTransformState( mesh->GetTransformState() );
-
+   const Matrix4f model_to_camera_mtx = 
+      mCamera->GetTransformState().GetXfm().OrthonormalInverse() * mesh->GetTransformState().GetXfm();
+   const Matrix3f normal_to_camera_mtx =
+      model_to_camera_mtx.Rotation();
+   const Matrix4f& camera_to_clip_mtx =
+      mCamera->GetViewMtx();
+   
    gl::UniformMatrix4fv( mModelToCameraLocation,
                          1,       // number of matrices
                          GL_TRUE, // we are row-major
-                         mPipeline->GetModelToCameraXfm().Data() );
+                         model_to_camera_mtx.Data() );
 
-   const Matrix3f normal_to_camera_mtx( mPipeline->GetModelToCameraXfm() );
    gl::UniformMatrix3fv( mNormalModelToCameraLocation,
                          1,
                          GL_TRUE,
@@ -163,7 +169,7 @@ void Renderer::SetUniforms( Mesh* mesh )
    gl::UniformMatrix4fv( mCameraToClipLocation,
                          1,
                          GL_TRUE,
-                         mPipeline->GetCameraToClipXfm().Data() );
+                         camera_to_clip_mtx.Data() );
 
    gl::Uniform3fv( mLightPosLocation,
                    1,
