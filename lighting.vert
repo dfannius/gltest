@@ -21,5 +21,7 @@ void main()
    vec3 normal_cam = normalize( normal_to_camera_mtx * normal );
    vec3 dir_to_light = normalize( light_pos.xyz - position_cam.xyz );
    float cos_incidence = clamp( dot( normal_cam, dir_to_light ), 0.02, 1 );
-   vert_color = vec4( cos_incidence * color, 1.0 );
+
+   // vert_color = vec4( cos_incidence * color, 1.0 );
+   vert_color = vec4( color, 1.0 );
 }
