@@ -33,12 +33,14 @@ public:
 
    // Returns the index of the vertex just added
    int AddVertex( const Vector3f& pos, const Vector3f& color );
+   int AddVertex( const Vector3f& pos, const Vector3f& normal, const Vector3f& color );
    const Vector3f* VertexData() const { return &mVertices[0]; }
    int VertexDataSize() const { return mVertices.size() * sizeof( Vector3f ); }
    int VertexDataCount() const { return mVertices.size(); }
+   int NumVertices() const { return mVertices.size() / NumVertexDataTypes(); }
 
    int Index( int idx ) const { return mIndices[idx]; }
-   void AddIndices( int i0, int i1, int i2 );
+   void AddTriangle( int i0, int i1, int i2 );
    const int* IndexData() const { return &mIndices[0]; }
    int IndexDataSize() const { return mIndices.size() * sizeof( int ); }
    int IndexDataCount() const { return mIndices.size(); }
@@ -58,6 +60,10 @@ public:
    const Vector3f& GetTranslation();
    const Vector3f& GetRotation();
 
+   void AddSquare( const Matrix3f& rot, const Vector3f& color );
+
+   friend std::ostream& operator<< ( std::ostream &out, const Mesh& mesh );
+
 private:
    int AddAveragedVertex( int i, int j );
    void SubdivideTriangle( int tri_idx );
@@ -67,4 +73,7 @@ private:
    TransformState* mTransformState;
 };
 
+std::ostream& operator<< ( std::ostream &out, const Mesh& mesh );
+
 Mesh* NewSphere();
+Mesh* NewCube();
