@@ -1,6 +1,6 @@
 #include <assert.h>
 #include <cstdlib>
-#include <sstream>
+#include <iostream>
 
 #include "ShaderProgram.h"
 #include "Utl.h"
