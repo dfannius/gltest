@@ -1,4 +1,4 @@
-#include <sstream>
+#include <iostream>
 
 #include "Pipeline.h"
 #include "TransformState.h"
@@ -7,7 +7,7 @@
 void Pipeline::DebugVector( Vector3f const& v ) const
 {
    ComputeXfm();
-   Vector4f vout = mXfm * v;
+   Vector4f vout = mXfm * Vector4f( v );
    DBOUT( "Projection of " << v << " = " << vout << "\n" );
 }
 
