@@ -13,17 +13,19 @@ OBJDIR = objs
 COBJS = $(CSRCS:%.c=$(OBJDIR)/%.o)
 CXXOBJS = $(CXXSRCS:%.cpp=$(OBJDIR)/%.o)
 
+define makedeps
+@sed -e "s|.*: |$(OBJDIR)/$*.o: |" < $(OBJDIR)/$*.d > $(DEPDIR)/$*.P
+@sed -e "s/.*: //" -e "s/\\\\$$//" < $(OBJDIR)/$*.d | fmt -1 | sed -e "s/^ *//" -e "s/$$/:/" >> $(DEPDIR)/$*.P
+@rm -f $(OBJDIR)/$*.d
+endef
+
 $(OBJDIR)/%.o : %.c
 	$(CC) -c -MMD -o $@ $<
-	@sed -e "s|.*: |$*@: |" < $(OBJDIR)/$*.d > $(DEPDIR)/$*.P
-	@sed -e "s/.*: //" -e "s/\\\\$$//" < $(OBJDIR)/$*.d | fmt -1 | sed -e "s/^ *//" -e "s/$$/:/" >> $(DEPDIR)/$*.P
-	@rm -f $(OBJDIR)/$*.d
+	$(makedeps)
 
 $(OBJDIR)/%.o : %.cpp
 	$(CXX) $(CXXFLAGS) -c -MMD -o $@ $<
-	@sed -e "s|.*: |$@: |" < $(OBJDIR)/$*.d > $(DEPDIR)/$*.P
-	@sed -e "s/.*: //" -e "s/\\\\$$//" < $(OBJDIR)/$*.d | fmt -1 | sed -e "s/^ *//" -e "s/$$/:/" >> $(DEPDIR)/$*.P
-	@rm -f $(OBJDIR)/$*.d
+	$(makedeps)
 
 # Disassembly
 %.lst : %.cpp FORCE
