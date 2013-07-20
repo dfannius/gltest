@@ -287,9 +287,14 @@ struct Matrix4f
       m[0][0] = m[1][1] = m[2][2] = m[3][3] = 1.f;
    }
 
+   Matrix4f OrthonormalInverse();
+
    void SetScale( const Vector3f& v );
    void SetRotation( const Vector3f& v ); // v's angles are in radians
    void SetTranslation( const Vector3f& v );
+   void SetPerspective( float left, float right,
+                        float bottom, float top,
+                        float z_near, float z_far );
 
    const float* Data() const { return &m[0][0]; }
 

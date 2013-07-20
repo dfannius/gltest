@@ -1,11 +1,16 @@
+#include <iostream>
+
 #include "Math.h"
+#include "MathTest.h"
 
-float test( const Vector3f& a, const Vector3f& b )
+void TestMatrixInverse()
 {
-   Vector3f c;
-   AddInto( c, a, b );
-   
-   Vector3f d = a + b;
+   Vector3f rot( .6f, 1.2f, 1.8f );
+   Matrix4f m;
+   m.SetRotation( rot );
+   Matrix4f n = m.OrthonormalInverse();
 
-   return c.x + d.x;
+   std::cout << "Original matrix" << std::endl << m;
+   std::cout << "Inverse" << std::endl << n;
+   std::cout << "Product" << std::endl << n * m;
 }

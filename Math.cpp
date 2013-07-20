@@ -6,8 +6,8 @@ std::ostream& operator<< (std::ostream &out, Matrix3f const &m)
 {
    for (int i = 0; i < 3; ++i) {
       for (int j = 0; j < 3; ++j) {
-         out.precision( 2 );
-         out << std::setw( 6 );
+         out.precision( 3 );
+         out << std::fixed << std::setw( 6 );
          out << m.m[i][j] << " ";
       }
       out << "\n";
@@ -19,8 +19,8 @@ std::ostream& operator<< (std::ostream &out, Matrix4f const &m)
 {
    for (int i = 0; i < 4; ++i) {
       for (int j = 0; j < 4; ++j) {
-         out.precision( 2 );
-         out << std::setw( 6 );
+         out.precision( 3 );
+         out << std::fixed << std::setw( 6 );
          out << m.m[i][j] << " ";
       }
       out << "\n";
@@ -31,8 +31,8 @@ std::ostream& operator<< (std::ostream &out, Matrix4f const &m)
 std::ostream& operator<< (std::ostream &out, Vector3f const &v)
 {
    for (int i = 0; i < 3; ++i) {
-      out.precision( 2 );
-      out << std::setw( 6 );
+      out.precision( 3 );
+      out << std::fixed << std::setw( 6 );
       out << v[i] << " ";
    }
    return out;
@@ -41,8 +41,8 @@ std::ostream& operator<< (std::ostream &out, Vector3f const &v)
 std::ostream& operator<< (std::ostream &out, Vector4f const &v)
 {
    for (int i = 0; i < 4; ++i) {
-      out.precision( 2 );
-      out << std::setw( 6 );
+      out.precision( 3 );
+      out << std::fixed << std::setw( 6 );
       out << v[i] << " ";
    }
    return out;
@@ -119,6 +119,30 @@ Vector4f operator*( const Matrix4f& m, const Vector4f& v )
    return vout;
 }
 
+Matrix4f Matrix4f::OrthonormalInverse()
+{
+   Matrix4f n;                  // return value, should be RVOed
+
+   n.m[0][0] = m[0][0];
+   n.m[0][1] = m[1][0];
+   n.m[0][2] = m[2][0];
+   n.m[0][3] = -(m[0][0] * m[0][3] + m[1][0] * m[1][3] + m[2][0] * m[2][3] );
+   n.m[1][0] = m[0][1];
+   n.m[1][1] = m[1][1];
+   n.m[1][2] = m[2][1];
+   n.m[1][3] = -(m[0][1] * m[1][3] + m[1][1] * m[1][3] + m[2][1] * m[2][3] );
+   n.m[2][0] = m[0][2];
+   n.m[2][1] = m[1][2];
+   n.m[2][2] = m[2][2];
+   n.m[2][3] = -(m[0][2] * m[2][3] + m[1][2] * m[1][3] + m[2][2] * m[2][3] );
+   n.m[3][0] = 0.f;
+   n.m[3][1] = 0.f;
+   n.m[3][2] = 0.f;
+   n.m[3][3] = 1.f;
+
+   return n;
+}
+
 void Matrix4f::SetScale( const Vector3f& v )
 {
    SetZero();
@@ -157,6 +181,21 @@ void Matrix4f::SetTranslation( const Vector3f& v )
    m[0][3] = v.x;
    m[1][3] = v.y;
    m[2][3] = v.z;
+}
+
+void Matrix4f::SetPerspective( float left, float right,
+                               float bottom, float top,
+                               float z_near, float z_far )
+{
+   SetZero();
+
+   m[0][0] = 2.f * z_near / (right - left);
+   m[0][2] = (right + left) / (right - left);
+   m[1][1] = 2.f * z_near / (top - bottom);
+   m[1][2] = (top + bottom) / (top - bottom);
+   m[2][2] = - (z_far + z_near) / (z_far - z_near);
+   m[2][3] = -2.f * z_far * z_near / (z_far - z_near );
+   m[3][2] = -1.f;
 }
 
 float degrees_to_radians( float x )
