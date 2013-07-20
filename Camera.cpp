@@ -2,11 +2,18 @@
 #include "TransformState.h"
 
 Camera::Camera():
-   mTransformState( new TransformState )
+   mTransform( new TransformState )
 {
 }
 
 Camera::~Camera()
 {
-   delete mTransformState;
+   delete mTransform;
+}
+
+void Camera::SetPerspective( float left, float right,
+                             float bottom, float top,
+                             float z_near, float z_far )
+{
+   mView.SetPerspective( left, right, bottom, top, z_near, z_far );
 }
