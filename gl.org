@@ -23,7 +23,8 @@
  - [X] Make sure search doesn't descend into .git, deps, objs
  - [X] Renderer use TransformState instead of Pipeline
  - [X] Add camera (new transform after Model, before Clip)
- - [ ] Allow camera movement
+ - [X] Allow camera movement forward
+ - [ ] Allow WASD camera movement
  - [ ] Multiple objects
  - [ ] Need to call glDisableVertexAttribArray?
  - [ ] debug and release builds

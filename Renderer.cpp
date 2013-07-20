@@ -26,7 +26,8 @@ Renderer::Renderer():
    mLightPosLocation( -1 ),
    mScale( 0.f ),
    mLastMs( 0 ),
-   mCamera( new Camera )
+   mCamera( new Camera ),
+   mMovementFlag( false )
 {
    mLightPos.SetZero();
 
@@ -147,6 +148,15 @@ void Renderer::UpdateObjects( long ms )
    }
 }
 
+void Renderer::UpdateCamera( long ms )
+{
+   const int delta_ms = ms - mLastMs;
+   if (mMovementFlag)
+   {
+      mCamera->LocalMove( Vector3f( 0.f, 0.f, -delta_ms * .01f ) );
+   }
+}
+
 void Renderer::SetUniforms( Mesh* mesh )
 {
    const Matrix4f model_to_camera_mtx = 
@@ -213,6 +223,7 @@ void Renderer::Poll( long ms )
 
    UpdateScene( ms );
    UpdateObjects( ms );
+   UpdateCamera( ms );
 
    for (auto mesh : mMeshes)
    {

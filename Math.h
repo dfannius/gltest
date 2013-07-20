@@ -122,6 +122,8 @@ struct Vector4f
    Vector4f( float _x, float _y, float _z, float _w ):
       x( _x ), y( _y ), z( _z ), w( _w ) {}
 
+   Vector3f ToVector3f() const { return Vector3f( x, y, z ); }
+
    float* v() { return &x; }
    const float* v() const { return &x; }
 
@@ -314,10 +316,10 @@ Vector4f operator*( const Matrix4f& m, const Vector4f& v );
 
 //////////////////////////////
 
-std::ostream& operator<< (std::ostream &out, const Matrix3f &m);
-std::ostream& operator<< (std::ostream &out, const Matrix4f &m);
-std::ostream& operator<< (std::ostream &out, const Vector3f &v);
-std::ostream& operator<< (std::ostream &out, const Vector4f &v);
+std::ostream& operator<< ( std::ostream &out, const Matrix3f &m );
+std::ostream& operator<< ( std::ostream &out, const Matrix4f &m );
+std::ostream& operator<< ( std::ostream &out, const Vector3f &v );
+std::ostream& operator<< ( std::ostream &out, const Vector4f &v );
 
 float degrees_to_radians( float x );
 float radians_to_degrees( float x );

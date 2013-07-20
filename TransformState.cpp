@@ -38,3 +38,18 @@ void TransformState::ComputeXfm()
 {
    mXfm = mTranslationXfm * mRotationXfm * mScaleXfm;
 }
+
+std::ostream& operator<< ( std::ostream &out, const TransformState &xfm )
+{
+   out << "Scale " << xfm.mScale << std::endl;
+   out << "Trans " << xfm.mTranslation << std::endl;
+   out << "Rotat " << xfm.mRotation << std::endl;
+
+   out << "Scale" << std::endl << xfm.mScaleXfm;
+   out << "Translation" << std::endl << xfm.mTranslationXfm;
+   out << "Rotation" << std::endl << xfm.mRotationXfm;
+
+   out << "Composition" << std::endl << xfm.mXfm;
+
+   return out;
+}

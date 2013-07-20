@@ -20,6 +20,9 @@ public:
 
    void Poll( long ms );
 
+   void SetMovementFlag() { mMovementFlag = true; }
+   void ClearMovementFlag() { mMovementFlag = false; }
+
 private:
    void InitGl();
    void InitGlVars();
@@ -44,6 +47,7 @@ private:
 
    void UpdateScene( long ms );
    void UpdateObjects( long ms );
+   void UpdateCamera( long ms );
 
    gl::buffer_id mVBO;       // vertex buffer object
    gl::buffer_id mIBO;       // index buffer object
@@ -63,4 +67,6 @@ private:
 
    std::vector<Mesh*> mMeshes;
    Vector3f mLightPos;
+
+   bool mMovementFlag;
 };

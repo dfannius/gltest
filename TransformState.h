@@ -15,6 +15,7 @@ public:
    const Vector3f& GetTranslation() { return mTranslation; }
    const Vector3f& GetRotation() { return mRotation; }
 
+   const Matrix4f& GetRotationXfm() { return mRotationXfm; }
    const Matrix4f& GetXfm() { return mXfm; }
 
 public:
@@ -31,3 +32,4 @@ public:
    Matrix4f mXfm;               // composition
 };
 
+std::ostream& operator<< ( std::ostream &out, const TransformState &xfm );

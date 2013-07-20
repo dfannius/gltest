@@ -20,6 +20,8 @@ namespace
 
    char szTitle[MAX_LOADSTRING];       // ihe title bar text
    char szWindowClass[MAX_LOADSTRING]; // the main window class name
+
+   Renderer* gRend = nullptr;
 }
 
 // Forward declarations
@@ -70,7 +72,7 @@ int WinMain( HINSTANCE hInstance,     // instance of the application
    EnableOpenGL( hWnd, &hDC, &hRC );
    gl3wInit();
 
-   Renderer rend;
+   gRend = new Renderer;
 
    timeBeginPeriod( 1 );
    long start_ms = timeGetTime();
@@ -97,7 +99,7 @@ int WinMain( HINSTANCE hInstance,     // instance of the application
       }
       else
       {
-         rend.Poll( timeGetTime() - start_ms );
+         gRend->Poll( timeGetTime() - start_ms );
          SwapBuffers( hDC );
       }
    }
@@ -238,6 +240,8 @@ LRESULT CALLBACK WndProc( HWND hWnd,      // window handle
 
             case IDM_EXIT:
             {
+               delete gRend;
+               gRend = nullptr;
                DisableOpenGL( hWnd, hDC, hRC );
                DestroyWindow( hWnd );
                break;
@@ -257,6 +261,26 @@ LRESULT CALLBACK WndProc( HWND hWnd,      // window handle
             case VK_ESCAPE:
             {
                SendMessage( hWnd, WM_COMMAND, IDM_EXIT, 0 );
+               break;
+            }
+            case 0x57:          // w
+            {
+               gRend->SetMovementFlag();
+               break;
+            }
+            default:
+               break;
+         }
+         break;
+      }
+
+      case WM_KEYUP:
+      {
+         switch (wParam)
+         {
+            case 0x57:          // w
+            {
+               gRend->ClearMovementFlag();
                break;
             }
             default:
@@ -306,36 +330,3 @@ INT_PTR CALLBACK About( HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam )
    }
    return (INT_PTR) FALSE;
 }
-
-#if 0
-int main( int argc, char **argv )
-{
-   glutInit( &argc, argv );
-   // request version 4.1
-   glutInitContextVersion( 4, 1 );
-   // core profile 
-   glutInitContextFlags( GLUT_FORWARD_COMPATIBLE );
-   glutInitContextProfile( GLUT_CORE_PROFILE );
-
-   // double buffered, depth, color w/ alpha
-   glutInitDisplayMode( GLUT_RGBA | GLUT_DEPTH | GLUT_DOUBLE );
-   glutInitWindowSize( 640, 480 );
-   glutCreateWindow( "OpenGL Test" );
-
-   if (gl3wInit()) {
-      std::cerr << "Failed to initialize." << std::endl;
-      return -1;
-   }
-   if (!gl3wIsSupported( 4, 1 )) {
-      std::cerr << "OpenGL 4.1 not supported" << std::endl;
-      return -1;
-   }
-
-	std::cout << "OpenGL " << glGetString( GL_VERSION ) << "\nGLSL "
-             << glGetString( GL_SHADING_LANGUAGE_VERSION );
-   glClearColor( 0, 0, 0, 0 );
-   glutDisplayFunc( display );
-   glutMainLoop();
-   return 0;
-}
-#endif
