@@ -7,12 +7,16 @@
 #include <string>
 #include <type_traits>
 
-#define DBOUT( s )                           \
+#if 0 
+# define DBOUT( s )                           \
 {                                            \
    std::ostringstream os_;                   \
    os_ << s;                                 \
    OutputDebugStringA( os_.str().c_str() );  \
 }
+#else
+# define DBOUT( s ) std::cout << s
+#endif
 
 #define DIM( arr ) (sizeof arr / sizeof arr[0])
 
