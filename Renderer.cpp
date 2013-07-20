@@ -1,6 +1,6 @@
 #include <assert.h>
 #include <cstdlib>
-#include <sstream>
+#include <iostream>
 #include <string>
 
 #include "GlUtl.h"
@@ -67,7 +67,7 @@ void Renderer::InitPipeline()
 void Renderer::CreateMeshes()
 {
    for (int i = 0; i < 1; ++i) {
-      mMeshes.push_back( NewSphere() );
+      mMeshes.push_back( NewCube() );
    }
 }
 
