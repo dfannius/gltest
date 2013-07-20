@@ -213,6 +213,8 @@ struct Matrix3f
    float const* Data() const { return &m[0][0]; }
 
    float m[3][3];
+
+   friend struct Matrix4f;
 };
 
 Matrix3f operator*( const Matrix3f& m1, const Matrix3f& m2 );
@@ -287,7 +289,8 @@ struct Matrix4f
       m[0][0] = m[1][1] = m[2][2] = m[3][3] = 1.f;
    }
 
-   Matrix4f OrthonormalInverse();
+   Matrix4f OrthonormalInverse() const;
+   Matrix3f Rotation() const;
 
    void SetScale( const Vector3f& v );
    void SetRotation( const Vector3f& v ); // v's angles are in radians

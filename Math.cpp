@@ -119,7 +119,7 @@ Vector4f operator*( const Matrix4f& m, const Vector4f& v )
    return vout;
 }
 
-Matrix4f Matrix4f::OrthonormalInverse()
+Matrix4f Matrix4f::OrthonormalInverse() const
 {
    Matrix4f n;                  // return value, should be RVOed
 
@@ -140,6 +140,15 @@ Matrix4f Matrix4f::OrthonormalInverse()
    n.m[3][2] = 0.f;
    n.m[3][3] = 1.f;
 
+   return n;
+}
+
+Matrix3f Matrix4f::Rotation() const
+{
+   Matrix3f n;
+   for (int i = 0; i < 3; ++i)
+      for (int j = 0; j < 3; ++j)
+         n.m[i][j] = m[i][j];
    return n;
 }
 
