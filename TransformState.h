@@ -15,6 +15,8 @@ public:
    const Vector3f& GetTranslation() { return mTranslation; }
    const Vector3f& GetRotation() { return mRotation; }
 
+   const Matrix4f& GetXfm() { return mXfm; }
+
 public:
    void ComputeXfm();
 
