@@ -88,6 +88,11 @@ inline Vector3f operator/( Vector3f a, float b )
    return a /= b;
 }
 
+inline Vector3f operator*( float a, Vector3f b )
+{
+   return b *= a;
+}
+
 /*
 inline void AddInto( Vector3f& res, const Vector3f& v, const Vector3f& w )
 {
