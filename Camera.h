@@ -4,6 +4,10 @@
 
 class TransformState;
 
+//////////////////////////////
+//
+// The camera is defined to point towards -z!
+// 
 class Camera
 {
 public:
