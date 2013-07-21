@@ -26,7 +26,7 @@
  - [X] Allow camera movement forward
  - [X] Allow camera shifting by controller keyboard
  - [X] Allow camera rotation
- - [ ] Camera movement/rotation up & down
+ - [X] Camera movement/rotation up & down
  - [ ] Lighting
  - [ ] Multiple objects
  - [ ] Need to call glDisableVertexAttribArray?

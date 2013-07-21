@@ -230,8 +230,12 @@ LRESULT CALLBACK WndProc( HWND hWnd,      // window handle
       { 0x53, kMoveBack },    // s
       { 0x5a, kMoveLeft },    // z
       { 0x43, kMoveRight },   // c
+      { 0x45, kMoveUp },      // e
+      { 0x51, kMoveDown },    // q
       { 0x41, kRotateLeft },  // a
-      { 0x44, kRotateRight }  // d
+      { 0x44, kRotateRight }, // d
+      { 0x31, kRotateUp },    // 1
+      { 0x33, kRotateDown }   // 3
    };
 
    switch (message)

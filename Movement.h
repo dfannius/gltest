@@ -11,6 +11,8 @@ enum MovementFlag {
    kMoveDown,
    kRotateLeft,
    kRotateRight,
+   kRotateUp,
+   kRotateDown,
    kNumMovementFlags
 };
 

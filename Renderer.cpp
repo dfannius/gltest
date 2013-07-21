@@ -155,12 +155,16 @@ void Renderer::UpdateCamera( long ms )
       { kMoveForward, { 0.f,  0.f, -1.f} },
       { kMoveBack,    { 0.f,  0.f,  1.f} },
       { kMoveLeft,    {-1.f,  0.f,  0.f} },
-      { kMoveRight,   { 1.f,  0.f,  0.f} }
+      { kMoveRight,   { 1.f,  0.f,  0.f} },
+      { kMoveUp,      { 0.f,  1.f,  0.f} },
+      { kMoveDown,    { 0.f, -1.f,  0.f} }
    };
 
    static struct { MovementFlag flag; Vector3f vec; } rotates[] = {
       { kRotateLeft,  { 0.f, -1.f,  0.f} },
-      { kRotateRight, { 0.f,  1.f,  0.f} }
+      { kRotateRight, { 0.f,  1.f,  0.f} },
+      { kRotateUp,    { 1.f,  0.f,  0.f} },
+      { kRotateDown,  {-1.f,  0.f,  0.f} }
    };
 
 
