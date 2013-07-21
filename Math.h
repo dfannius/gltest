@@ -1,5 +1,4 @@
-#ifndef GLTEST_MATH_H
-#define GLTEST_MATH_H
+#pragma once
 
 #include <cstring>
 #include <ostream>
@@ -323,5 +322,3 @@ std::ostream& operator<< ( std::ostream &out, const Vector4f &v );
 
 float degrees_to_radians( float x );
 float radians_to_degrees( float x );
-
-#endif
