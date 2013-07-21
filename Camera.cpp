@@ -35,3 +35,15 @@ void Camera::LocalMove( const Vector3f& delta )
 
    if (dbg) std::cout << "NEW STATE " << std::endl << *mTransform;
 }
+
+void Camera::LocalRotate( const Vector3f& delta )
+{
+   static bool dbg = false;
+
+   if (dbg) std::cout << "Camera::LocalRotate " << delta << std::endl;
+   if (dbg) std::cout << "CURRENT STATE " << std::endl << *mTransform;
+
+   mTransform->SetRotation( mTransform->GetRotation() + delta );
+
+   if (dbg) std::cout << "NEW STATE " << std::endl << *mTransform;
+}

@@ -158,11 +158,25 @@ void Renderer::UpdateCamera( long ms )
       { kMoveRight,   { 1.f,  0.f,  0.f} }
    };
 
+   static struct { MovementFlag flag; Vector3f vec; } rotates[] = {
+      { kRotateLeft,  { 0.f, -1.f,  0.f} },
+      { kRotateRight, { 0.f,  1.f,  0.f} }
+   };
+
+
    for (auto f : shifts)
    {
       if (mMovementFlags.Flag( f.flag ))
       {
          mCamera->LocalMove( delta_ms * .01f * f.vec );
+      }
+   }
+
+   for (auto f : rotates)
+   {
+      if (mMovementFlags.Flag( f.flag ))
+      {
+         mCamera->LocalRotate( delta_ms * .0001f * f.vec );
       }
    }
 }

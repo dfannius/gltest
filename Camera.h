@@ -19,6 +19,7 @@ public:
                         float z_near, float z_far );
 
    void LocalMove( const Vector3f& delta );
+   void LocalRotate( const Vector3f& delta );
 
    const Matrix4f& GetViewMtx() const { return mView; }
 

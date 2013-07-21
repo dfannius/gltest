@@ -25,7 +25,9 @@
  - [X] Add camera (new transform after Model, before Clip)
  - [X] Allow camera movement forward
  - [X] Allow camera shifting by controller keyboard
- - [ ] Allow camera rotation
+ - [X] Allow camera rotation
+ - [ ] Camera movement/rotation up & down
+ - [ ] Lighting
  - [ ] Multiple objects
  - [ ] Need to call glDisableVertexAttribArray?
  - [ ] debug and release builds
