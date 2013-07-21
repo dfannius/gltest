@@ -1,11 +1,13 @@
 #include <windows.h>
 
 #include <iostream>
+#include <map>
 #include <stdio.h>
 
 #include <GL3/gl3w.h>
 #include <GL/freeglut.h>
 
+#include "Movement.h"
 #include "Renderer.h"
 #include "Resource.h"
 
@@ -223,6 +225,13 @@ LRESULT CALLBACK WndProc( HWND hWnd,      // window handle
 {
    int wmId /* , wmEvent */ ;
 
+   static std::map<WPARAM, MovementFlag> movement_map = {
+      { 0x57, kMoveForward }, // w
+      { 0x53, kMoveBack },    // s
+      { 0x5a, kMoveLeft },    // z
+      { 0x43, kMoveRight },   // c
+   };
+
    switch (message)
    {
       case WM_COMMAND:
@@ -263,29 +272,20 @@ LRESULT CALLBACK WndProc( HWND hWnd,      // window handle
                SendMessage( hWnd, WM_COMMAND, IDM_EXIT, 0 );
                break;
             }
-            case 0x57:          // w
+            default:
             {
-               gRend->SetMovementFlag();
+               if (movement_map.count( wParam ))
+                  gRend->SetMovementFlag( movement_map[wParam] );
                break;
             }
-            default:
-               break;
          }
          break;
       }
 
       case WM_KEYUP:
       {
-         switch (wParam)
-         {
-            case 0x57:          // w
-            {
-               gRend->ClearMovementFlag();
-               break;
-            }
-            default:
-               break;
-         }
+         if (movement_map.count( wParam ))
+            gRend->ClearMovementFlag( movement_map[wParam] );
          break;
       }
 

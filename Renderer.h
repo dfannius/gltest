@@ -7,6 +7,7 @@
 
 #include "GlUtl.h"
 #include "Math.h"
+#include "Movement.h"
 
 class Camera;
 class Mesh;
@@ -20,8 +21,8 @@ public:
 
    void Poll( long ms );
 
-   void SetMovementFlag() { mMovementFlag = true; }
-   void ClearMovementFlag() { mMovementFlag = false; }
+   void SetMovementFlag( MovementFlag flag ) { mMovementFlags.SetFlag( flag ); }
+   void ClearMovementFlag( MovementFlag flag ) { mMovementFlags.ClearFlag( flag ); }
 
 private:
    void InitGl();
@@ -68,5 +69,5 @@ private:
    std::vector<Mesh*> mMeshes;
    Vector3f mLightPos;
 
-   bool mMovementFlag;
+   MovementFlags mMovementFlags;
 };

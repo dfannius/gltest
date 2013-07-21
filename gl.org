@@ -24,7 +24,8 @@
  - [X] Renderer use TransformState instead of Pipeline
  - [X] Add camera (new transform after Model, before Clip)
  - [X] Allow camera movement forward
- - [ ] Allow WASD camera movement
+ - [X] Allow camera shifting by controller keyboard
+ - [ ] Allow camera rotation
  - [ ] Multiple objects
  - [ ] Need to call glDisableVertexAttribArray?
  - [ ] debug and release builds

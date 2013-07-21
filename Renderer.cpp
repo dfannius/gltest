@@ -26,8 +26,7 @@ Renderer::Renderer():
    mLightPosLocation( -1 ),
    mScale( 0.f ),
    mLastMs( 0 ),
-   mCamera( new Camera ),
-   mMovementFlag( false )
+   mCamera( new Camera )
 {
    mLightPos.SetZero();
 
@@ -151,9 +150,20 @@ void Renderer::UpdateObjects( long ms )
 void Renderer::UpdateCamera( long ms )
 {
    const int delta_ms = ms - mLastMs;
-   if (mMovementFlag)
+
+   static struct { MovementFlag flag; Vector3f vec; } shifts[] = {
+      { kMoveForward, { 0.f,  0.f, -1.f} },
+      { kMoveBack,    { 0.f,  0.f,  1.f} },
+      { kMoveLeft,    {-1.f,  0.f,  0.f} },
+      { kMoveRight,   { 1.f,  0.f,  0.f} }
+   };
+
+   for (auto f : shifts)
    {
-      mCamera->LocalMove( Vector3f( 0.f, 0.f, -delta_ms * .01f ) );
+      if (mMovementFlags.Flag( f.flag ))
+      {
+         mCamera->LocalMove( delta_ms * .01f * f.vec );
+      }
    }
 }
 
