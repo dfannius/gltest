@@ -124,26 +124,27 @@ void Renderer::UpdateScene( long ms )
 
 void Renderer::UpdateObjects( long ms )
 {
-   float sinf_mScale = sinf( mScale );
-   float cosf_mScale = sinf( mScale );
-   // float sinf_tenth_mScale = sinf( mScale * 0.1f );
+   static bool move_objects = false;
 
-   // float xs[] = { -1.5f, 1.5f };
-   // float zs[] = { -20.f + sinf_mScale, -20.f - sinf_mScale };
-
-   float xs[] = { sinf_mScale, -sinf_mScale };
-   float ys[] = { 0.f, 0.f };
-   float zs[] = { -20.f + cosf_mScale, -20.f };
-
-   for (unsigned int i = 0; i < mMeshes.size(); ++i)
+   if (move_objects)
    {
-      Mesh* mesh = mMeshes[i];
+      float sinf_mScale = sinf( mScale );
+      float cosf_mScale = sinf( mScale );
 
-      Vector3f translation( xs[i], ys[i], zs[i] );
-      mesh->SetTranslation( translation );
+      float xs[] = { sinf_mScale, -sinf_mScale };
+      float ys[] = { 0.f, 0.f };
+      float zs[] = { -20.f + cosf_mScale, -20.f };
 
-      Vector3f rot( mScale, mScale * 2.f, mScale * 3.f );
-      mesh->SetRotation( rot );
+      for (unsigned int i = 0; i < mMeshes.size(); ++i)
+      {
+         Mesh* mesh = mMeshes[i];
+
+         Vector3f translation( xs[i], ys[i], zs[i] );
+         mesh->SetTranslation( translation );
+
+         Vector3f rot( mScale, mScale * 2.f, mScale * 3.f );
+         mesh->SetRotation( rot );
+      }
    }
 }
 
@@ -166,7 +167,6 @@ void Renderer::UpdateCamera( long ms )
       { kRotateUp,    { 1.f,  0.f,  0.f} },
       { kRotateDown,  {-1.f,  0.f,  0.f} }
    };
-
 
    for (auto f : shifts)
    {
