@@ -22,10 +22,16 @@ void Camera::SetPerspective( float left, float right,
 
 void Camera::LocalMove( const Vector3f& delta )
 {
-// std::cout << "Camera::LocalMove " << delta << std::endl;
-// std::cout << "CURRENT STATE " << std::endl << *mTransform;
+   static bool dbg = false;
+
+   if (dbg) std::cout << "Camera::LocalMove " << delta << std::endl;
+   if (dbg) std::cout << "CURRENT STATE " << std::endl << *mTransform;
+
    Vector3f rotated_delta = (mTransform->GetRotationXfm() * Vector4f( delta )).ToVector3f();
-// std::cout << "rotated delta " << rotated_delta << std::endl;
+
+   if (dbg) std::cout << "rotated delta " << rotated_delta << std::endl;
+
    mTransform->SetTranslation( mTransform->GetTranslation() + rotated_delta );
-// std::cout << "NEW STATE " << std::endl << *mTransform;
+
+   if (dbg) std::cout << "NEW STATE " << std::endl << *mTransform;
 }
