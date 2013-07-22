@@ -278,6 +278,11 @@ LRESULT CALLBACK WndProc( HWND hWnd,      // window handle
                SendMessage( hWnd, WM_COMMAND, IDM_EXIT, 0 );
                break;
             }
+            case 0xbe:
+            {
+               gRend->Debug();
+               break;
+            }
             default:
             {
                if (movement_map.count( wParam ))
