@@ -21,6 +21,7 @@ public:
 
    void Poll( long ms );
 
+   void Debug() { mDebugFrame = true; }
    void SetMovementFlag( MovementFlag flag ) { mMovementFlags.SetFlag( flag ); }
    void ClearMovementFlag( MovementFlag flag ) { mMovementFlags.ClearFlag( flag ); }
 
@@ -39,6 +40,7 @@ private:
    void SetUniforms( Mesh* mesh );
    void DrawElements( Mesh* mesh );
 
+   void AssignLocation( gl::location_id& loc, gl::program_id prog, const char* name );
    void CompileShaders();
    void LoadShader( ShaderProgram& shader_program, const char* filename, GLenum shader_type );
    void AddShader( ShaderProgram& shader_program,
@@ -49,6 +51,8 @@ private:
    void UpdateScene( long ms );
    void UpdateObjects( long ms );
    void UpdateCamera( long ms );
+
+   bool mDebugFrame = false;
 
    gl::buffer_id mVBO;       // vertex buffer object
    gl::buffer_id mIBO;       // index buffer object

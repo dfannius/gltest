@@ -16,6 +16,7 @@
 // ---------------------------------------------------------------------
 
 Renderer::Renderer():
+   mDebugFrame( false ),
    mVBO( -1 ),
    mIBO( -1 ),
    mVAO( -1 ),
@@ -63,6 +64,7 @@ void Renderer::InitGlVars()
 
 void Renderer::InitCamera()
 {
+   mCamera->GetTransformState().SetTranslation( {0.f, 0.f, 40.f} );
    mCamera->SetPerspective( -2.f, 2.f, -2.f, 2.f, 17.f, 53.f );
 }
 
@@ -75,7 +77,6 @@ void Renderer::CreateMeshes()
 
 void Renderer::CreateLight()
 {
-   mLightPos = Vector3f( 0.f, 0.f, -5.f );
 }
 
 void Renderer::CreateVertexBuffer()
@@ -117,29 +118,31 @@ void Renderer::UpdateScene( long ms )
    const int delta_ms = ms - mLastMs;
    mScale += delta_ms / 1600.f;
 
-   mLightPos.x = 0.f;
+   mLightPos.x = 100.f;
    mLightPos.y = 0.f;
-   mLightPos.z = -22.f;
+   mLightPos.z = 0.f;
 }
 
 void Renderer::UpdateObjects( long ms )
 {
-   static bool move_objects = false;
+   static bool move_objects = true;
 
    if (move_objects)
    {
+      /*
       float sinf_mScale = sinf( mScale );
       float cosf_mScale = sinf( mScale );
 
       float xs[] = { sinf_mScale, -sinf_mScale };
       float ys[] = { 0.f, 0.f };
       float zs[] = { -20.f + cosf_mScale, -20.f };
+      */
 
       for (unsigned int i = 0; i < mMeshes.size(); ++i)
       {
          Mesh* mesh = mMeshes[i];
 
-         Vector3f translation( xs[i], ys[i], zs[i] );
+         Vector3f translation( 0.f, 0.f, 0.f );
          mesh->SetTranslation( translation );
 
          Vector3f rot( mScale, mScale * 2.f, mScale * 3.f );
@@ -187,8 +190,10 @@ void Renderer::UpdateCamera( long ms )
 
 void Renderer::SetUniforms( Mesh* mesh )
 {
+   const Matrix4f world_to_camera_mtx = 
+      mCamera->GetTransformState().GetXfm().OrthonormalInverse();
    const Matrix4f model_to_camera_mtx = 
-      mCamera->GetTransformState().GetXfm().OrthonormalInverse() * mesh->GetTransformState().GetXfm();
+      world_to_camera_mtx * mesh->GetTransformState().GetXfm();
    const Matrix3f normal_to_camera_mtx =
       model_to_camera_mtx.Rotation();
    const Matrix4f& camera_to_clip_mtx =
@@ -209,9 +214,21 @@ void Renderer::SetUniforms( Mesh* mesh )
                          GL_TRUE,
                          camera_to_clip_mtx.Data() );
 
+   Vector3f light_pos_cam = (world_to_camera_mtx * Vector4f( mLightPos )).ToVector3f();
+
    gl::Uniform3fv( mLightPosLocation,
                    1,
-                   mLightPos.v() );
+                   light_pos_cam.v() );
+
+   if (mDebugFrame)
+   {
+      std::cout << "world_to_camera_mtx" << std::endl << world_to_camera_mtx;
+      std::cout << "model_to_camera_mtx" << std::endl << model_to_camera_mtx;
+      std::cout << "normal_to_camera_mtx" << std::endl << normal_to_camera_mtx;
+      std::cout << "untransformed light = " << mLightPos << std::endl;
+      std::cout << "transformed light = " << light_pos_cam << std::endl;
+      mDebugFrame = false;
+   }
 }
 
 void Renderer::DrawElements( Mesh* mesh )
@@ -268,6 +285,14 @@ void Renderer::Poll( long ms )
    // DBOUT( frame_delta << "\n" );
 }
 
+void Renderer::AssignLocation( gl::location_id& loc, gl::program_id prog, const char* name )
+{
+   loc = gl::GetUniformLocation( prog, name );
+   if (loc.val == -1) {
+      std::cout << "Error in glGetUniformLocation " << name << std::endl;
+   }
+}
+
 void Renderer::CompileShaders()
 {
    ShaderProgram program {};
@@ -279,10 +304,10 @@ void Renderer::CompileShaders()
    program.Activate();
 
    gl::program_id id = program.ProgramID();
-   mModelToCameraLocation       = gl::GetUniformLocation( id, "model_to_camera_mtx" );
-   mNormalModelToCameraLocation = gl::GetUniformLocation( id, "normal_to_camera_mtx" );
-   mCameraToClipLocation        = gl::GetUniformLocation( id, "camera_to_clip_mtx" );
-   mLightPosLocation            = gl::GetUniformLocation( id, "light_pos" );
+   AssignLocation( mModelToCameraLocation,       id, "model_to_camera_mtx" );
+   AssignLocation( mNormalModelToCameraLocation, id, "normal_to_camera_mtx" );
+   AssignLocation( mCameraToClipLocation,        id, "camera_to_clip_mtx" );
+   AssignLocation( mLightPosLocation,            id, "light_pos_cam" );
 }
 
 void Renderer::LoadShader( ShaderProgram& shader_program,
