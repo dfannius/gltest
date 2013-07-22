@@ -27,7 +27,7 @@
  - [X] Allow camera shifting by controller keyboard
  - [X] Allow camera rotation
  - [X] Camera movement/rotation up & down
- - [ ] Lighting
+ - [X] Lighting bug
  - [ ] Multiple objects
  - [ ] Need to call glDisableVertexAttribArray?
  - [ ] debug and release builds
@@ -106,3 +106,17 @@ require it.
 Good practice to null out the pointer when you're done.
 
    gl::BindBuffer( GL_ARRAY_BUFFER, gl::null_buffer_id );
+* Lighting bug
+Light is off to the right but cube is light as if the light were
+placed on the camera.
+
+Visualize position_cam: looks good. Red to the right (1, 0, 0), green
+to the top (0, 1, 0).
+
+Visualize dir_to_light: always bright blue (0, 0, 1) meaning towards camera,
+even though light is to the direction (1, 0, 0).
+
+Visualize light_pos_cam: black (0, 0, 0, I suppose). Should be red (1,
+0, 0).
+
+Was bad name in glGetUniformLocation. Added a warning.
