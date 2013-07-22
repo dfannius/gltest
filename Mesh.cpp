@@ -151,7 +151,7 @@ void Mesh::AddSquare( const Matrix3f& rot, const Vector3f& color )
    for (auto v : vertices)
    {
 //    std::cout << v << " -> " << rot * v << std::endl;
-      AddVertex( rot * v, normal, color );
+      AddVertex( rot * v, rot * normal, color );
    }
 
    AddTriangle( i, i+1, i+3 );
