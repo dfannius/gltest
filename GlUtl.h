@@ -28,7 +28,7 @@ namespace gl
    // Type-safe wrappers for OpenGL's GLuints
    DEFINE_INDEX_CLASS( GLuint, buffer_id );
    DEFINE_INDEX_CLASS( GLuint, program_id );
-   DEFINE_INDEX_CLASS( GLuint, location_id );
+   DEFINE_INDEX_CLASS( GLint, location_id );
    DEFINE_INDEX_CLASS( GLuint, shader_id );
    DEFINE_INDEX_CLASS( GLuint, vertex_array_id );
 
