@@ -1,3 +1,6 @@
 *.P
 *.exe
 *.o
+objs
+deps
+
